@@ -10,7 +10,7 @@ dotenv.config();
 const filePath = path.join(__dirname, '..', 'data.txt');
 const apiKey = process.env.OPENAI_API_KEY;
 
-export const run = async () => {
+export const searchCustomData = async (search : string) => {
   // Initialize the LLM to use to answer the question.
   const model = new OpenAI({ openAIApiKey: apiKey, temperature: 0.9 });
   console.log(`${model.modelName} is ready to server.`);
@@ -24,7 +24,7 @@ export const run = async () => {
   // Create a chain that uses the OpenAI LLM and HNSWLib vector store.
   const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
   const res = await chain.call({
-    query: "When did the college boy wake up?",
+    query: search,
   });
-  console.log({ res });
+  return res.text;
 };
